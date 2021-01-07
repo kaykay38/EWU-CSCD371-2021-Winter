@@ -1,4 +1,4 @@
-Jan 6, 2020 <br>
+Jan 5, 2020 <br>
 CSCD 371 - .NET Programming<br>
 ## Lecture 1
 #### Course Overview
