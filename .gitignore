@@ -1,4 +1,6 @@
-
+.DS_Store
+.gitignore
+Info.md
 # Created by https://www.gitignore.io/api/aspnetcore
 # Edit at https://www.gitignore.io/?templates=aspnetcore
 
