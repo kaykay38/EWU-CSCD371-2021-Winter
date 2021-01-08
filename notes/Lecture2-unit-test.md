@@ -10,7 +10,7 @@ CSCD 371 - .NET Programming<br>
     - Naming conventions matter!!!<br>
     - Always use camel case<br>
 - **Test order should not matter for success of tests**
-- **Propertie** prefered over **fields**
+- **Properties** prefered over **fields**
 ##### Visual Studio features & shortcuts
 - Live Unit Testing (Enterprise only?) 
 -
