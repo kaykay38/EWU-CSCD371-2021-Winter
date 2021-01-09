@@ -93,6 +93,7 @@ namespace PrincessBrideTrivia
             return "Trivia.txt";
         }
 
+        // FIXED: Added questions[i] = question (Previous ERROR: NULL REFERENCE)
         public static Question[] LoadQuestions(string filePath)
         {
             string[] lines = File.ReadAllLines(filePath);
