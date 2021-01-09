@@ -9,26 +9,42 @@ namespace PrincessBrideTrivia
         {
             string filePath = GetFilePath();
             Question[] questions = LoadQuestions(filePath);
-
+            int questionLen = questions.Length;
+            bool[] used = new bool[questionLen];
+            Random random = new Random();
+            int randomNumber;
             int numberCorrect = 0;
-            for (int i = 0; i < questions.Length; i++)
+            // EXTRA CREDIT: Randomly selects questions
+            while (Array.IndexOf(used, false) >= 0)
             {
-                bool result = AskQuestion(questions[i]);
-                if (result)
+                randomNumber = random.Next(0, questionLen);
+                if (!used[randomNumber])
                 {
-                    numberCorrect++;
+                    bool result = AskQuestion(questions[randomNumber]);
+                    used[randomNumber] = true;
+                    if (result)
+                    {
+                        numberCorrect++;
+                    }
                 }
             }
             Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
         }
 
+        // FIXED: Cast to double
         public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
         {
-            return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+            return (((double)numberCorrectAnswers / numberOfQuestions) * 100) + "%";
         }
 
+        // FIXED: Added if question == null
         public static bool AskQuestion(Question question)
         {
+            if (question == null)
+            {
+                Console.WriteLine("Quesiton is null");
+                return false;
+            }
             DisplayQuestion(question);
 
             string userGuess = GetGuessFromUser();
@@ -39,21 +55,32 @@ namespace PrincessBrideTrivia
         {
             return Console.ReadLine();
         }
-
+        
+        // FIXED: Added if quesiton == null
         public static bool DisplayResult(string userGuess, Question question)
         {
+            if (question==null)
+            {
+                Console.WriteLine("Question is null");
+                return false;
+            }
             if (userGuess == question.CorrectAnswerIndex)
             {
                 Console.WriteLine("Correct");
                 return true;
             }
-
             Console.WriteLine("Incorrect");
             return false;
         }
 
+        // FIXED: Added if quesiton == null
         public static void DisplayQuestion(Question question)
         {
+            if (question == null)
+            {
+                Console.WriteLine("Quesiton is null");
+                return;
+            }
             Console.WriteLine("Question: " + question.Text);
             for (int i = 0; i < question.Answers.Length; i++)
             {
@@ -69,7 +96,7 @@ namespace PrincessBrideTrivia
         public static Question[] LoadQuestions(string filePath)
         {
             string[] lines = File.ReadAllLines(filePath);
-
+        
             Question[] questions = new Question[lines.Length / 5];
             for (int i = 0; i < questions.Length; i++)
             {
@@ -89,6 +116,8 @@ namespace PrincessBrideTrivia
                 question.Answers[1] = answer2;
                 question.Answers[2] = answer3;
                 question.CorrectAnswerIndex = correctAnswerIndex;
+                // FIXED: Added questions[i] = question (Previous ERROR: NULL REFERENCE)
+                questions[i] = question;
             }
             return questions;
         }

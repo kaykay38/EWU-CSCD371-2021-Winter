@@ -26,6 +26,29 @@ namespace PrincessBrideTrivia.Tests
                 File.Delete(filePath);
             }
         }
+        [TestMethod]
+        public void LoadQuestions_ReturnQuestionNotNull()
+        {
+            string filePath = Path.GetRandomFileName();
+            try
+            {
+                // Arrange
+                GenerateQuestionsFile(filePath, 2);
+
+                // Act
+                Question[] questions = Program.LoadQuestions(filePath);
+
+                // Assert 
+                for (int i = 0; i < questions.Length; i++)
+                {
+                    Assert.IsNotNull(questions[i]);
+                }
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
 
         [DataTestMethod]
         [DataRow("1", true)]
@@ -53,6 +76,7 @@ namespace PrincessBrideTrivia.Tests
 
             // Assert
             Assert.IsTrue(File.Exists(filePath));
+
         }
 
         [DataTestMethod]
