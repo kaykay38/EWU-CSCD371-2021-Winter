@@ -26,6 +26,8 @@ namespace PrincessBrideTrivia.Tests
                 File.Delete(filePath);
             }
         }
+        
+        // ADDED this test
         [TestMethod]
         public void LoadQuestions_ReturnQuestionNotNull()
         {
