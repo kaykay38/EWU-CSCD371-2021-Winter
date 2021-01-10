@@ -26,10 +26,10 @@ namespace PrincessBrideTrivia.Tests
                 File.Delete(filePath);
             }
         }
-        
+
         // ADDED this test
         [TestMethod]
-        public void LoadQuestions_ReturnQuestionNotNull()
+        public void LoadQuestions_NotNull()
         {
             string filePath = Path.GetRandomFileName();
             try
@@ -44,6 +44,39 @@ namespace PrincessBrideTrivia.Tests
                 for (int i = 0; i < questions.Length; i++)
                 {
                     Assert.IsNotNull(questions[i]);
+                }
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        // ADDED this test
+        [TestMethod]
+        public void RandomQuestions_NotSameOrder()
+        {
+            string filePath = Path.GetRandomFileName();
+            try
+            {
+                // Arrange
+                GenerateQuestionsFile(filePath, 4);
+
+                // Act
+                Question[] questions = Program.LoadQuestions(filePath);
+                bool[] used = new bool[questions.Length];
+                int[] usedIndex = new int[questions.Length];
+                // Assert 
+                for (int i = 0; i < questions.Length; i++)
+                {
+                    int randomNumber = Program.RandomQuestionIndex(used);
+                    if (System.Array.IndexOf(usedIndex,randomNumber) > -1)
+                    {
+                        Assert.Fail();
+                    }
+                    usedIndex[i] = randomNumber;
+                    Assert.IsTrue(used[randomNumber]);
+                    Assert.AreNotEqual(i, randomNumber);
                 }
             }
             finally
@@ -86,8 +119,8 @@ namespace PrincessBrideTrivia.Tests
         [DataRow(5, 10, "50%")]
         [DataRow(1, 10, "10%")]
         [DataRow(0, 10, "0%")]
-        public void GetPercentCorrect_ReturnsExpectedPercentage(int numberOfCorrectGuesses, 
-            int numberOfQuestions, string expectedString)
+        public void GetPercentCorrect_ReturnsExpectedPercentage(int numberOfCorrectGuesses,
+                int numberOfQuestions, string expectedString)
         {
             // Arrange
 
