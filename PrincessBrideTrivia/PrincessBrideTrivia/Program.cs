@@ -9,12 +9,17 @@ namespace PrincessBrideTrivia
         {
             string filePath = GetFilePath();
             Question[] questions = LoadQuestions(filePath);
+
             bool[] used = new bool[questions.Length];
             int numberCorrect = 0;
             int randomNumber = 0;
-            while((randomNumber = RandomQuestionIndex(used))!=-1)
+
+            //Modified this to mirror the orignal code a bit more -Kiana
+            while (Array.IndexOf(used, false) >= 0)
             {
+                randomNumber = GetRandomNumber(used);
                 bool result = AskQuestion(questions[randomNumber]);
+                used[randomNumber] = true;
                 if (result)
                 {
                     numberCorrect++;
@@ -23,21 +28,17 @@ namespace PrincessBrideTrivia
             Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
         }
 
-        // EXTRA CREDIT: Randomly selects questions
-        public static int RandomQuestionIndex(bool[] used)
+        //EXTRA Credit: Randomly selects a number within the bounds of the question array.
+        public static int GetRandomNumber(bool[] used)
         {
             Random random = new Random();
-            int randomNumber = 0;
-            while (Array.IndexOf(used, false) >= 0)
+            int randomNumber = random.Next(0, used.Length);
+            if (Array.IndexOf(used, false) >= 0 && used[randomNumber] == false)
             {
-                randomNumber = random.Next(0, used.Length);
-                if (!used[randomNumber])
-                {
-                    used[randomNumber] = true;
-                    return randomNumber;
-                }
+
+                return randomNumber;
             }
-            return -1;
+            return GetRandomNumber(used);
         }
 
         // FIXED: Cast to double

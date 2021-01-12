@@ -56,33 +56,55 @@ namespace PrincessBrideTrivia.Tests
         [TestMethod]
         public void RandomQuestions_NotSameOrder()
         {
-            string filePath = Path.GetRandomFileName();
-            try
-            {
-                // Arrange
-                GenerateQuestionsFile(filePath, 4);
 
-                // Act
-                Question[] questions = Program.LoadQuestions(filePath);
-                bool[] used = new bool[questions.Length];
-                int[] usedIndex = new int[questions.Length];
-                // Assert 
-                for (int i = 0; i < questions.Length; i++)
+            // Arrange
+            bool[] used = new bool[5];
+            int randomNumber;
+            bool notFirstIndex = false;
+            // Act
+            for (int i = 0; i < 5; i++)
+            {
+                randomNumber = Program.GetRandomNumber(used);
+                if (randomNumber != 0)
                 {
-                    int randomNumber = Program.RandomQuestionIndex(used);
-                    if (System.Array.IndexOf(usedIndex,randomNumber) > -1)
-                    {
-                        Assert.Fail();
-                    }
-                    usedIndex[i] = randomNumber;
-                    Assert.IsTrue(used[randomNumber]);
-                    Assert.AreNotEqual(i, randomNumber);
+                    notFirstIndex = true;
                 }
             }
-            finally
-            {
-                File.Delete(filePath);
-            }
+            // Assert
+            Assert.IsTrue(notFirstIndex);
+        }
+
+        //ADDED this -Kiana
+        [DataTestMethod]
+        [DataRow(new bool[] { false, false, false })]
+        [DataRow(new bool[] { true, false, false })]
+        [DataRow(new bool[] { false, true, false, true })]
+        public void RandomQuestions_NumberInBoundsOfArray(bool[] used)
+        {
+            // Arrange
+
+            // Act
+            int randomNumber = Program.GetRandomNumber(used);
+
+            // Assert
+            Assert.IsTrue(randomNumber >= 0);
+            Assert.IsTrue(randomNumber < used.Length);
+        }
+
+        //ADDED this -Kiana
+        [DataTestMethod]
+        [DataRow(new bool[] { false, false, false })]
+        [DataRow(new bool[] { true, false, false })]
+        [DataRow(new bool[] { false, true, false, true })]
+        public void RandomQuestions_NoRepeat(bool[] used)
+        {
+            // Arrange
+
+            // Act
+            int randomNumber = Program.GetRandomNumber(used);
+
+            // Assert
+            Assert.AreEqual(used[randomNumber], false);
         }
 
         [DataTestMethod]
