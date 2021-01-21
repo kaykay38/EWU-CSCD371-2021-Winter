@@ -6,7 +6,7 @@ namespace Logger.Tests
     [TestClass]
     public class FileLoggerTests
     {
-        
+/*
         [TestInitialize]
         public void setup()
         {
@@ -48,6 +48,6 @@ namespace Logger.Tests
             // Act
             // Assert
         }
-
+*/
     }
 }
