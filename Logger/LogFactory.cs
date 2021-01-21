@@ -1,11 +1,26 @@
-﻿namespace Logger
+﻿using System.IO;
+
+namespace Logger
 {
     public class LogFactory
     {
-        public BaseLogger CreateLogger(string className)
+        private string? _filePath { get; set; }
+
+        public BaseLogger? CreateLogger(string className)
         {
-            
-            return null;
+            if (_filePath!=null && File.Exists(_filePath))
+            {
+                return new FileLogger(_filePath) { className = className };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ConfigureFileLogger(string filePath)
+        {
+            _filePath = filePath;
         }
     }
 }

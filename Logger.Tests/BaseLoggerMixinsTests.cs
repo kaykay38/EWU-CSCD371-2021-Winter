@@ -11,12 +11,18 @@ namespace Logger.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Error_WithNullLogger_ThrowsException()
         {
-            // Arrange
-
-            // Act
-            //BaseLoggerMixins.Error(null, "");
-
-            // Assert
+                // Arrange
+            try
+            {
+                // Act
+                BaseLoggerMixins.Error(null, "");
+            }
+            catch (ArgumentNullException exception)
+            {
+                // Assert
+                Assert.AreEqual(null, exception.ParamName);
+                throw;
+            }
         }
 
         [TestMethod]
@@ -26,7 +32,7 @@ namespace Logger.Tests
             var logger = new TestLogger();
 
             // Act
-            //logger.Error("Message {0}", 42);
+            logger.Error("Message {0}", 42);
 
             // Assert
             Assert.AreEqual(1, logger.LoggedMessages.Count);

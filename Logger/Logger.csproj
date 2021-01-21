@@ -4,4 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+	  <EnableNETAnalyzers>true</EnableNETAnalyzers>
+	  <LangVersion>9.0</LangVersion>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
 </Project>
