@@ -10,7 +10,7 @@ namespace Logger
         {
             if (_filePath!=null && File.Exists(_filePath))
             {
-                return new FileLogger(_filePath) { className = className };
+                return new FileLogger(_filePath) { ClassName = className };
             }
             else
             {

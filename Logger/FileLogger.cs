@@ -5,10 +5,18 @@ namespace Logger
 {
     public class FileLogger : BaseLogger
     {
-        private string? _filePath { get; set; }
+        private string? _filePath;
+        public string? FilePath
+        {
+            get
+            {
+                return _filePath;
+            }
+            set => _filePath = value;
+        }
         public FileLogger(string filePath)
         {
-            _filePath = filePath;
+            FilePath = filePath ?? throw new ArgumentNullException();
         }
         public override void Log(LogLevel logLevel, string message)
         {
@@ -19,7 +27,7 @@ namespace Logger
             else
             {
                 StreamWriter writer = new StreamWriter(_filePath, true);
-                string logMessage = $"{DateTime.Now:MM/dd/yyyy hh:mm:ss t} {nameof(className)} {logLevel}: {message}";
+                string logMessage = $"{DateTime.Now:MM/dd/yyyy hh:mm:ss tt} {base.ClassName} {logLevel}: {message}";
                 writer.WriteLine(logMessage);
                 writer.Close();
             }
