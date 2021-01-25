@@ -1,0 +1,15 @@
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <Nullable>true</Nullable>
+
+BaseLogger - need auto property
+FileLogger - derives from BaseLogger
+	@param - string filePath
+	@do - append to file
+	date time className loglevel message
+	ex. "10/7/2019 12:38:59 AM FileLoggerTests Warning: Test message"
+LogFactory - uses object initializer
+	@Method - ConfigureFileLogger
+	@param - string filePath
+		store in private member
+		private 
