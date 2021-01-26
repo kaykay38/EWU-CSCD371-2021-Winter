@@ -8,7 +8,7 @@ namespace CanHazFunny
 
         public string GetJoke()
         {
-            string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api?format=json").Result;
+            string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api").Result;
             return joke;
         }
     }
