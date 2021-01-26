@@ -2,7 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<LangVersion>9.0</LangVersion>
+	<Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
