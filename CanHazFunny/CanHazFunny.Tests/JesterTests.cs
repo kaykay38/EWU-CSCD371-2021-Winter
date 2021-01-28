@@ -1,5 +1,4 @@
-using System;
-using System.IO;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -10,11 +9,21 @@ namespace CanHazFunny.Tests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void JesterNewInstance_GivenNullValue_ThrowArgumentNullException()
+        public void JesterNewInstance_GivenNullJokeService_ThrowArgumentNullException()
         {
             // Arrange
             // Act
-            Jester jester = new Jester(null!, null!);
+            Jester jester = new Jester(null!, new JokePrinter());
+            // Assert
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JesterNewInstance_GivenNullJokePrinter_ThrowArgumentNullException()
+        {
+            // Arrange
+            // Act
+            Jester jester = new Jester(new JokeService(), null!);
             // Assert
         }
 
@@ -34,10 +43,10 @@ namespace CanHazFunny.Tests
         }
 
         [TestMethod]
-        public void TellJoke_ValidJoke_ExcecutesWithoutException()
+        public void TellJoke_GivenValidJoke_ExcecutesWithoutException()
         {
             //Arrange
-            string joke="Some bad dad joke that makes you roll your eyes.";
+            string joke = "Some bad dad joke that makes you roll your eyes.";
             Mock<IJokeService> mockJokeService = new Mock<IJokeService>();
             mockJokeService.SetupSequence(JokeService => JokeService.GetJoke())
                 .Returns(joke);
@@ -57,14 +66,14 @@ namespace CanHazFunny.Tests
         public void TellJoke_GivenChuckNorris_CycleThroughLoop()
         {
             // Arrange
-            Mock<IJokeService> mockJokeService = new ();
+            Mock<IJokeService> mockJokeService = new();
             mockJokeService.SetupSequence(jokeService => jokeService.GetJoke())
                 .Returns("Since 1940, the year Chuck Norris was born, roundhouse kick related deaths have increased 13,000 percent.")
                 .Returns("Chuck Norris never retreats; He just attacks in the opposite direction.")
                 .Returns("What did the full glass say to the empty glass?\nYou look drunk.")
                 .Returns("Chuck Norris once won a game of Connect Four in three moves.")
-                .Returns("Why couldn�t the toilet paper cross the road?\nBecause it got stuck in a crack.");
-            
+                .Returns("Why couldn’t the toilet paper cross the road?\nBecause it got stuck in a crack.");
+
             Jester jester = new Jester(mockJokeService.Object, new JokePrinter());
 
             // Act
