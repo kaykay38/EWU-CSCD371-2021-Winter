@@ -10,6 +10,7 @@ namespace CanHazFunny.Tests
         public void GetJoke_ReturnsAJoke_NotNull()
         {
             // Arrange
+            // Act
             JokeService jokeService = new JokeService();
 
             // Assert
