@@ -6,7 +6,7 @@ namespace CanHazFunny
     {
         public void PrintJoke(string joke) 
         {
-            Console.WriteLine("Joke: "+joke);
+            Console.WriteLine(joke);
         }
     }
 }

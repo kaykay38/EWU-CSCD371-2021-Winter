@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -33,6 +34,26 @@ namespace CanHazFunny.Tests
         }
 
         [TestMethod]
+        public void TellJoke_ValidJoke_ExcecutesWithoutException()
+        {
+            //Arrange
+            string joke="Some bad dad joke that makes you roll your eyes.";
+            Mock<IJokeService> mockJokeService = new Mock<IJokeService>();
+            mockJokeService.SetupSequence(JokeService => JokeService.GetJoke())
+                .Returns(joke);
+
+            Mock<IJokePrinter> mockJokePrinter = new Mock<IJokePrinter>();
+            mockJokePrinter.SetupSequence(JokePrinter => JokePrinter.PrintJoke(joke));
+            Jester jester = new Jester(mockJokeService.Object, mockJokePrinter.Object);
+
+            // Act
+            jester.TellJoke();
+
+            // Assert
+            mockJokePrinter.VerifyAll();
+        }
+
+        [TestMethod]
         public void TellJoke_GivenChuckNorris_CycleThroughLoop()
         {
             // Arrange
@@ -51,26 +72,6 @@ namespace CanHazFunny.Tests
 
             // Assert
             mockJokeService.Verify(jokeService => jokeService.GetJoke(), Times.Exactly(3));
-        }
-
-
-        [TestMethod]
-        public void PrintJoke_ValidJoke_HasOutput()
-        {
-            //Arrange
-            Mock<IJokeService> mockJokeService = new Mock<IJokeService>();
-            mockJokeService.SetupSequence(JokeService => JokeService.GetJoke())
-                .Returns("Some bad dad joke that makes you roll your eyes.");
-
-            Mock<IJokePrinter> mockJokePrinter = new Mock<IJokePrinter>();
-            mockJokePrinter.SetupSequence(JokePrinter => JokePrinter.PrintJoke("Some bad dad joke that makes you roll your eyes."));
-            Jester jester = new Jester(mockJokeService.Object, mockJokePrinter.Object);
-
-            // Act
-            jester.TellJoke();
-
-            // Assert
-            mockJokePrinter.VerifyAll();
         }
     }
 }
