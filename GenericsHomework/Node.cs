@@ -4,8 +4,8 @@ namespace GenericsHomework
 {
     public class Node<T>
     {
-        private Node<T> next;
-        private T data;
+        private Node<T>? next;
+        private T? data;
 
         public Node<T> Next
         {
@@ -27,8 +27,13 @@ namespace GenericsHomework
             data = t;
         }
 
-        public override string ToString(){
+        public override string? ToString(){
 
+            if(data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            
             return data.ToString();
         }
         public Node<T> Insert(T t){
