@@ -141,18 +141,37 @@ namespace GenericsHomework
 
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            Node<T> cur = this.Next;
+            Node<T> prev = this;
+            bool first = true;
+
+            while(cur != this.Next && !first)
+            {
+                if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
+                {
+                    prev = cur.Next;
+                    return true;
+                }
+                else
+                {
+                    prev = cur;
+                    cur = cur.Next;
+                }
+                
+                first = false;
+            }
+
+            return false;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return ((IEnumerable)this).GetEnumerator();
         }
-
     }
 }
