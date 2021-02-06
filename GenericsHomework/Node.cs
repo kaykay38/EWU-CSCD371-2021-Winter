@@ -4,44 +4,70 @@ namespace GenericsHomework
 {
     public class Node<T>
     {
-        private Node<T>? next;
-        private T? data;
+        private Node<T>? _next;
+        private T? _data;
 
         public Node<T> Next
         {
             get 
             {
-                return next!; 
+                return _next!; 
             }
-            
+
             private set
             {
-                value.next = this.next;
-                next = value??throw new ArgumentNullException();
-                
+                value._next = this._next;
+                _next = value??throw new ArgumentNullException();
             }
         }
 
-        public Node(T t){
-            next = this;
-            data = t;
+        public Node(T t)
+        {
+            _next = this;
+            _data = t;
         }
 
-        public override string? ToString(){
-
-            if(data is null)
+        public T? Data 
+        { 
+            get 
             {
-                throw new ArgumentNullException(nameof(data));
+                return _data!;
             }
-            
-            return data.ToString();
         }
+
+        public override string? ToString()
+        {
+
+            if(_data is null)
+            {
+                throw new ArgumentNullException(nameof(_data));
+            }
+
+            return _data.ToString();
+        }
+
         public Node<T> Insert(T t){
-            Node<T> nn = new Node<T>(t);
-            this.Next = nn;
+            Node<T> newNode = new (t);
+            this.Next = newNode;
 
-            return nn;
+            return newNode;
         }
-
+        
+        // Must deference all removed nodes by setting them to null to allow for garbage collection
+        public void Clear()
+        {
+            //Node<T>? curTemp = this;
+            Node<T>? prev = this;
+            Node<T>? cur = this.Next;
+            while (prev != cur?.Next && cur != this )
+            {
+                prev = cur?.Next;
+                cur = null;
+                cur = prev;
+                prev = prev?.Next;
+            }
+            prev = null;
+            this.Next = this;
+        }
     }
 }
