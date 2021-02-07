@@ -166,12 +166,18 @@ namespace GenericsHomework
 
         public IEnumerator<T> GetEnumerator()
         {
-            return this.GetEnumerator();
+            Node<T> cur = this;
+
+            yield return cur.Data;
+            for(cur = this.Next; cur != this; cur = cur.Next)
+            {
+                yield return cur.Data;
+            } 
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)this).GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }
