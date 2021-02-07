@@ -59,14 +59,15 @@ namespace GenericsHomework
             return _data.ToString();
         }
 
-        public Node<T> Insert(T t){
+        public Node<T> Insert(T t)
+        {
             Node<T> newNode = new (t);
             this.Next = newNode;
 
             return newNode;
         }
         
-        // Must deference all removed nodes by setting them to null to allow for garbage collection
+        // Must dereference all removed nodes by setting them to null to allow for garbage collection
         public void Clear()
         {
             Node<T> cur;
@@ -97,23 +98,20 @@ namespace GenericsHomework
 
         public bool Contains(T item)
         {
-
-            Node<T> cur = this;
-            bool contains = false;
-            bool first = true;
-
-            while(cur != this && !first){
-
-                if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
+            if(this.Data == null && item == null || this.Data != null && this.Data.Equals(item))
+                return true;
+            else{
+                Node<T> cur = this.Next;
+                while(cur != this)
                 {
-                    contains = true;
+                    if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
+                    {
+                        return true;
+                    }
+                    cur = cur.Next;
                 }
-                cur = cur.Next;
-                first = false;
             }
-
-            return contains;
-            
+            return false;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -141,11 +139,14 @@ namespace GenericsHomework
 
         public bool Remove(T item)
         {
-            Node<T> cur = this.Next;
             Node<T> prev = this;
-            bool first = true;
+            Node<T> cur = this.Next;
 
-            while(cur != this.Next && !first)
+            if(this.Data == null && item == null || this.Data != null && this.Data.Equals(item))
+            {
+                return true;
+            }
+            while(cur != this)
             {
                 if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
@@ -157,10 +158,7 @@ namespace GenericsHomework
                     prev = cur;
                     cur = cur.Next;
                 }
-                
-                first = false;
             }
-
             return false;
         }
 
