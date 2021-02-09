@@ -8,51 +8,53 @@ namespace GenericsHomework
     {
         private Node<T>? _next;
         private T? _data;
-
-        public Node<T> Next
-        {
-            get 
-            {
-                return _next!; 
-            }
-
-            private set
-            {
-                value._next = this._next;
-                _next = value??throw new ArgumentNullException();
-            }
-        }
-        private void SetNext(Node<T> value){
-                _next = value??throw new ArgumentNullException();    
-        }
-
-         public T Data 
-        { 
-            get 
-            {
-                return _data!;
-            }
-
-            private set
-            {
-                _data = value??throw new ArgumentNullException();;
-            }
-        }
-
-        public Node(T t)
-        {
-            _next = this;
-            _data = t;
-        }
-
-
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly { get; }
 
         public int Count
         {
             get
             {
                 return Size();
+            }
+        }
+
+
+        public Node<T> Next
+        {
+            get
+            {
+                return _next!;
+            }
+
+            private set
+            {
+                value._next = this._next;
+                _next = value ?? throw new ArgumentNullException();
+            }
+        }
+
+        public Node(T t)
+        {
+            Next = this;
+            Data = t;
+        }
+
+
+        private void SetNext(Node<T> value)
+        {
+            _next = value ?? throw new ArgumentNullException();
+        }
+
+        public T Data
+        {
+            get
+            {
+                return _data!;
+            }
+
+            private set
+            {
+                _data = value ?? throw new ArgumentNullException(nameof(value)); ;
             }
         }
 
@@ -72,8 +74,7 @@ namespace GenericsHomework
 
         public override string? ToString()
         {
-
-            if(_data is null)
+            if (_data is null)
             {
                 throw new ArgumentNullException(nameof(_data));
             }
@@ -83,24 +84,23 @@ namespace GenericsHomework
 
         public Node<T> Insert(T t)
         {
-            Node<T> newNode = new (t);
+            Node<T> newNode = new(t);
             this.Next = newNode;
 
             return newNode;
         }
-        
+
         // Must dereference all removed nodes by setting them to null to allow for garbage collection
         public void Clear()
         {
             Node<T> cur;
 
-            if(this.Next != this)
+            if (this.Next != this)
             {
                 cur = this.Next;
                 this.Next = this;
                 cur.Clear();
             }
-
         }
 
         public void Add(T item)
@@ -110,18 +110,16 @@ namespace GenericsHomework
 
         public bool Contains(T item)
         {
-            if(this.Data == null && item == null || this.Data != null && this.Data.Equals(item))
-                return true;
-            else{
-                Node<T> cur = this.Next;
-                while(cur != this)
+            Node<T> cur = this;
+            bool first = true;
+            while (cur != this || first)
+            {
+                if ((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
-                    if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
-                    {
-                        return true;
-                    }
-                    cur = cur.Next;
+                    return true;
                 }
+                cur = cur.Next;
+                first = false;
             }
             return false;
         }
@@ -129,21 +127,23 @@ namespace GenericsHomework
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (array == null)
-           throw new ArgumentNullException("The array cannot be null.");
-            if (arrayIndex < 0)
-            throw new ArgumentOutOfRangeException("The starting array index cannot be negative.");
+                throw new ArgumentNullException("The array cannot be null.");
+            if (arrayIndex < 0 || arrayIndex >= array.Length)
+                throw new ArgumentOutOfRangeException("The CopyTo start array index cannot be negative or above the highest index of the target array.");
 
             Node<T> cur = this;
             bool first = true;
+        
+            while (cur != this || first)
+            {
 
-            while(cur != this || first){
+                if (arrayIndex > array.Length - 1)
+                    throw new ArgumentException("The destination array does not have enough space to copy all the elements from the node list.");
 
-                if(arrayIndex > array.Length-1)
-                    throw new ArgumentException("The destination array has fewer elements than the collection.");
-                
                 array[arrayIndex] = cur.Data;
 
                 arrayIndex++;
+                cur = cur.Next;
                 first = false;
             }
 
@@ -151,17 +151,16 @@ namespace GenericsHomework
 
         public bool Remove(T item)
         {
-            
+
             Node<T> prev = this;
             Node<T> cur = this.Next;
             bool first = true;
 
-
-            while(cur != this.Next || first)
+            while (cur != this.Next || first)
             {
-                if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
+                if ((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
-                    prev.SetNext(cur.Next);
+                    prev.SetNext(cur.Next);// Next set -> cur.next = prev.next
                     return true;
                 }
                 else
@@ -169,10 +168,8 @@ namespace GenericsHomework
                     prev = cur;
                     cur = cur.Next;
                 }
-
                 first = false;
             }
-
             return false; 
         }
 
@@ -181,10 +178,10 @@ namespace GenericsHomework
             Node<T> cur = this;
 
             yield return cur.Data;
-            for(cur = this.Next; cur != this; cur = cur.Next)
+            for (cur = this.Next; cur != this; cur = cur.Next)
             {
                 yield return cur.Data;
-            } 
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

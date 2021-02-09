@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,6 +27,15 @@ namespace GenericsHomework.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NewInstance_GivenNullParams_ThrowArgumentNullException()
+        {
+
+            Node<string> node1 = new (null!);
+            string next = node1.Data.ToString();
+        }
+
+        [TestMethod]
         public void Clear_Given4StringNodesClearFromNode3_DeferencedOtherNodes()
         {
             Node<string> node1 = new Node<string>("First");
@@ -34,6 +44,7 @@ namespace GenericsHomework.Tests
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
             Assert.AreEqual("Third", node3.Next.Next.Next.Next.ToString());
+            //Assert.AreEqual("Third", node2.Next.Next.Next.Next.ToString());
         }
 
         [TestMethod]
@@ -109,23 +120,53 @@ namespace GenericsHomework.Tests
         }
 
         [TestMethod]
-        public void CopyTo_GivenInt4ValuesCopyToIndex0_HasCopiedEqualToString()
+        public void CopyTo_GivenInt4Values_CopyTo8LengthArrayAtIndex0_HasCopiedEqualToString()
         {
             int[] copiedArr = new int[4];
             int[] expectedArr = {1, 2, 3, 4};
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             list.CopyTo(copiedArr, 0); 
-            Assert.AreEqual(expectedArr.ToString(), copiedArr.ToString());
+            Assert.AreEqual(ToString(expectedArr), ToString(copiedArr));
         }
 
         [TestMethod]
-        public void CopyTo_GivenInt4ValuesCopyToIndex2_HasCopiedEqualToString()
+        public void CopyTo_GivenInt4Nodes_CopyTo8LengthArrayAtIndex2_HasCopiedEqualToString()
         {
             int[] copiedArr = new int[8];
-            int[] expectedArr = {0, 0, 0, 1, 2, 3, 4, 0};
+            int[] expectedArr = {0, 0, 1, 2, 3, 4, 0, 0};
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             list.CopyTo(copiedArr, 2); 
-            Assert.AreEqual(expectedArr.ToString(), copiedArr.ToString());
+            Assert.AreEqual(ToString(expectedArr), ToString(copiedArr));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CopyTo_Given4IntNodes_CopyTo8LengthArrayAtIndex5_ThrowsArgumentException()
+        {
+            int[] copiedArr = new int[8];
+            int[] expectedArr = {0, 0, 1, 2, 3, 4, 0, 0};
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+            list.CopyTo(copiedArr, 5); 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CopyTo_Given4IntNodes_CopyTo8LengthArrayAtNegativeIndex_ThrowsArgumentOutOfRangeException()
+        {
+            int[] copiedArr = new int[8];
+            int[] expectedArr = {0, 0, 1, 2, 3, 4, 0, 0};
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+            list.CopyTo(copiedArr, -3); 
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CopyTo_Given4IntNodes_CopyTo8LengthArrayAtIndex9_ThrowsArgumentOutOfRangeException()
+        {
+            int[] copiedArr = new int[8];
+            int[] expectedArr = {0, 0, 1, 2, 3, 4, 0, 0};
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+            list.CopyTo(copiedArr, 9); 
         }
 
         [TestMethod]
@@ -198,11 +239,51 @@ namespace GenericsHomework.Tests
         }
 
         [TestMethod]
-        public void Remove_Given4StringNodes_TrueRemoved()
+        public void IsReadOnly_Given4IntNodes_False()
+        {
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+            Assert.IsFalse(list.IsReadOnly);
+        }
+
+        [TestMethod]
+        public void Remove_Given4IntNodesRemoveFirstNode_TrueRemoved()
+        {
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+            Assert.IsTrue(list.Remove(1));
+            //Assert.AreEqual("86", list.ToString());
+            Assert.AreEqual("9", list.ToString());
+            //Assert.AreEqual("33 42 33", $"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}");
+        }
+
+        [TestMethod]
+        public void Remove_Given4IntNodesRemoveSecondNode_TrueRemoved()
+        {
+            Node<int> node1 = new Node<int>(10);
+            Node<int> node2 = node1.Insert(33);
+            Node<int> node3 = node2.Insert(42);
+            Node<int> node4 = node3.Insert(86);
+            node1.Remove(33);
+            Assert.AreEqual("10 42 86 10", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()}");
+        }
+
+        [TestMethod]
+        public void Remove_Given4StringNodesRemoveFourthNode_TrueRemoved()
         {
             Node<string> list = CreateString4NodeList("First", "Second", "Third", "Fourth");
-            Assert.IsTrue(list.Remove("Second"));
-            Assert.AreEqual("First Third Fourth",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()}"); 
+            Assert.IsTrue(list.Remove("Fourth"));
+            Assert.AreEqual("First Second Third First",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()}"); 
+        }
+
+        [TestMethod]
+        public void Remove_Given4IntArrayNodes_TrueRemoved()
+        {
+            int [] intArr1 = {1 ,2 ,3 ,4};
+            int [] intArr2 = {5, 6, 7, 8};
+            int [] intArr3 = {9, 10, 11, 12};
+            int [] intArr4 = {13, 14, 15, 16};
+            Node<int[]> list = CreateIntArray4NodeList(intArr1, intArr2, intArr3, intArr4);
+            Assert.IsTrue(list.Remove(intArr3));
+            Assert.AreEqual($"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr4)}", $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}"); 
         }
 
         [TestMethod]
@@ -255,7 +336,7 @@ namespace GenericsHomework.Tests
             Node<int[]> node4 = node3.Insert(intArr4);
             return node1;
         }
-
+        public string ToString(int[] array) => "{" + string.Join(", ", array) + "}";
         public string ToString(ArrayList list) => "{" + string.Join(", ", list.ToArray()) + "}";
         public string ToString<T>(List<T> list) => "{" + string.Join(", ", list.ToArray()) + "}";
     }
