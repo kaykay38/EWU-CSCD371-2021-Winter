@@ -22,6 +22,9 @@ namespace GenericsHomework
                 _next = value??throw new ArgumentNullException();
             }
         }
+        private void setNodeNextNormal(Node<T> value){
+                _next = value??throw new ArgumentNullException();    
+        }
 
          public T Data 
         { 
@@ -124,7 +127,7 @@ namespace GenericsHomework
             Node<T> cur = this;
             bool first = true;
 
-            while(cur != this && !first){
+            while(cur != this || first){
 
                 if(arrayIndex > array.Length-1)
                     throw new ArgumentException("The destination array has fewer elements than the collection.");
@@ -139,18 +142,16 @@ namespace GenericsHomework
 
         public bool Remove(T item)
         {
+            
             Node<T> prev = this;
             Node<T> cur = this.Next;
+            bool first = true;
 
-            if(this.Data == null && item == null || this.Data != null && this.Data.Equals(item))
-            {
-                return true;
-            }
-            while(cur != this)
+            while(cur != this.Next || first)
             {
                 if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
-                    prev = cur.Next;
+                    prev.setNodeNextNormal(cur.Next);// Next set -> cur.next = prev.next
                     return true;
                 }
                 else
@@ -158,7 +159,10 @@ namespace GenericsHomework
                     prev = cur;
                     cur = cur.Next;
                 }
+
+                first = false;
             }
+
             return false;
         }
 

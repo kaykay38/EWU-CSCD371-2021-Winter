@@ -201,9 +201,8 @@ namespace GenericsHomework.Tests
         public void Remove_Given4StringNodes_TrueRemoved()
         {
             Node<string> list = CreateString4NodeList("First", "Second", "Third", "Fourth");
-            list.Remove("Second");
             Assert.IsTrue(list.Remove("Second"));
-            Assert.AreEqual("First Third Fourth",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()}"); 
+            Assert.AreEqual("First Third Fourth",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()}"); 
         }
 
         [TestMethod]
