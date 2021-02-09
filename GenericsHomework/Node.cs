@@ -22,7 +22,7 @@ namespace GenericsHomework
                 _next = value??throw new ArgumentNullException();
             }
         }
-        private void setNodeNextNormal(Node<T> value){
+        private void SetNext(Node<T> value){
                 _next = value??throw new ArgumentNullException();    
         }
 
@@ -45,11 +45,30 @@ namespace GenericsHomework
             _data = t;
         }
 
-       
-
-        public int Count => throw new NotImplementedException();
 
         public bool IsReadOnly => throw new NotImplementedException();
+
+        public int Count
+        {
+            get
+            {
+                return Size();
+            }
+        }
+
+        private int Size() 
+        {
+            Node<T> cur = this.Next;
+            int count = 1;
+            while(cur != this)
+                {
+                    count++;
+                    cur = cur.Next;
+                }
+            return count;
+        }
+
+        // int ICollection<T>.Count => throw new NotImplementedException();
 
         public override string? ToString()
         {
@@ -81,17 +100,7 @@ namespace GenericsHomework
                 this.Next = this;
                 cur.Clear();
             }
-        // Node<T>? prev = this;
-        // Node<T>? cur = this.Next;
-        // while (prev != cur?.Next && cur != this )
-        // {
-        //     prev = cur?.Next;
-        //     cur = null;
-        //     cur = prev;
-        //     prev = prev?.Next;
-        // }
-        // prev = null;
-        // this.Next = this;
+
         }
 
         public void Add(T item)
@@ -147,11 +156,12 @@ namespace GenericsHomework
             Node<T> cur = this.Next;
             bool first = true;
 
+
             while(cur != this.Next || first)
             {
                 if((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
-                    prev.setNodeNextNormal(cur.Next);// Next set -> cur.next = prev.next
+                    prev.SetNext(cur.Next);
                     return true;
                 }
                 else
@@ -163,7 +173,7 @@ namespace GenericsHomework
                 first = false;
             }
 
-            return false;
+            return false; 
         }
 
         public IEnumerator<T> GetEnumerator()

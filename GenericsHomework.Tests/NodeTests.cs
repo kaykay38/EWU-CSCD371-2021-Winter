@@ -221,6 +221,14 @@ namespace GenericsHomework.Tests
             Assert.AreEqual("Word", node1.ToString());
         }
 
+        [TestMethod]
+        public void Count_fourNodes_EqualToFour()
+        {
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+
+            Assert.AreEqual(4, list.Count);
+        }
+
         public Node<int> CreateInt4NodeList(int num1, int num2, int num3, int num4)
         {
             Node<int> node1 = new Node<int>(num1);
