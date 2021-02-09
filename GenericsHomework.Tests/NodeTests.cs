@@ -28,11 +28,11 @@ namespace GenericsHomework.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NewInstance_GivenNullParams_ThrowArgumentNullException()
+        public void NewInstance_GivenNullValue_ThrowArgumentNullException()
         {
 
             Node<string> node1 = new (null!);
-            string next = node1.Data.ToString();
+            //string? next = node1.ToString();
         }
 
         [TestMethod]
@@ -170,6 +170,14 @@ namespace GenericsHomework.Tests
         }
 
         [TestMethod]
+        public void Count_FourNodes_EqualToFour()
+        {
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+
+            Assert.AreEqual(4, list.Count);
+        }
+
+        [TestMethod]
         public void EqualsOperator_GivenIntNode_EqualsIsTrue()
         {
             Node<int> node1 = new Node<int>(789);
@@ -251,7 +259,7 @@ namespace GenericsHomework.Tests
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             Assert.IsTrue(list.Remove(1));
             //Assert.AreEqual("86", list.ToString());
-            Assert.AreEqual("9", list.ToString());
+            //Assert.AreEqual("9", list.ToString());
             //Assert.AreEqual("33 42 33", $"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}");
         }
 
@@ -300,14 +308,6 @@ namespace GenericsHomework.Tests
             Node<string> node1 = new Node<string>("Word");
 
             Assert.AreEqual("Word", node1.ToString());
-        }
-
-        [TestMethod]
-        public void Count_fourNodes_EqualToFour()
-        {
-            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
-
-            Assert.AreEqual(4, list.Count);
         }
 
         public Node<int> CreateInt4NodeList(int num1, int num2, int num3, int num4)
