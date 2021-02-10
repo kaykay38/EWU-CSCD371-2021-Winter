@@ -23,7 +23,7 @@ namespace GenericsHomework.Tests
         {
             Node<string> node1 = new Node<string>("Word");
 
-            Assert.AreEqual("Word", node1.Data);
+            Assert.AreEqual<string>("Word", node1.Data);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual("Third", node3.Next.Next.Next.Next.ToString());
+            Assert.AreEqual<string>("Third", node3.Next.Next.Next.Next.ToString()!);
             //Assert.AreEqual("Third", node2.Next.Next.Next.Next.ToString());
         }
 
@@ -55,7 +55,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual("First", node1.Next.ToString());
+            Assert.AreEqual<string>("First", node1.Next.ToString()!);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual("Second", node2.Next.ToString());
+            Assert.AreEqual<string>("Second", node2.Next.ToString()!);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual("Third", node3.Next.ToString());
+            Assert.AreEqual<string>("Third", node3.Next.ToString()!);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual("Fourth", node4.Next.ToString());
+            Assert.AreEqual<string>("Fourth", node4.Next.ToString()!);
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace GenericsHomework.Tests
             int[] expectedArr = {1, 2, 3, 4};
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             list.CopyTo(copiedArr, 0); 
-            Assert.AreEqual(ToString(expectedArr), ToString(copiedArr));
+            Assert.AreEqual<string>(ToString(expectedArr), ToString(copiedArr));
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace GenericsHomework.Tests
             int[] expectedArr = {0, 0, 1, 2, 3, 4, 0, 0};
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             list.CopyTo(copiedArr, 2); 
-            Assert.AreEqual(ToString(expectedArr), ToString(copiedArr));
+            Assert.AreEqual<string>(ToString(expectedArr), ToString(copiedArr));
         }
 
         [TestMethod]
@@ -174,7 +174,7 @@ namespace GenericsHomework.Tests
         {
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
 
-            Assert.AreEqual(4, list.Count);
+            Assert.AreEqual<int>(4, list.Count);
         }
 
         [TestMethod]
@@ -196,7 +196,7 @@ namespace GenericsHomework.Tests
             {
                 arrayList.Add(item);
             }
-            Assert.AreEqual("{First, Second, Third, Fourth}", ToString(arrayList));
+            Assert.AreEqual<string>("{First, Second, Third, Fourth}", ToString(arrayList));
         }
 
         [TestMethod]
@@ -207,7 +207,7 @@ namespace GenericsHomework.Tests
             list = list.Insert(3);
             list = list.Insert(4);
 
-            Assert.AreEqual("1 2 3 4", $"{list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}");
+            Assert.AreEqual<string>("1 2 3 4", $"{list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}");
         }
 
         [TestMethod]
@@ -218,7 +218,7 @@ namespace GenericsHomework.Tests
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
 
-            Assert.AreEqual("First Second Third Fourth First", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()} {node1.Next.Next.Next.Next.ToString()}");
+            Assert.AreEqual<string>("First Second Third Fourth First", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()} {node1.Next.Next.Next.Next.ToString()}");
         }
 
         [TestMethod]
@@ -229,7 +229,7 @@ namespace GenericsHomework.Tests
             Node<int> node3 = node2.Insert(42);
             Node<int> node4 = node3.Insert(86);
 
-            Assert.AreEqual("10 33 42 86", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()}");
+            Assert.AreEqual<string>("10 33 42 86", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()}");
         }
 
         [TestMethod]
@@ -271,7 +271,7 @@ namespace GenericsHomework.Tests
             Node<int> node3 = node2.Insert(42);
             Node<int> node4 = node3.Insert(86);
             node1.Remove(33);
-            Assert.AreEqual("10 42 86 10", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()}");
+            Assert.AreEqual<string>("10 42 86 10", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()}");
         }
 
         [TestMethod]
@@ -279,7 +279,7 @@ namespace GenericsHomework.Tests
         {
             Node<string> list = CreateString4NodeList("First", "Second", "Third", "Fourth");
             Assert.IsTrue(list.Remove("Fourth"));
-            Assert.AreEqual("First Second Third First",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()}"); 
+            Assert.AreEqual<string>("First Second Third First",$"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()}"); 
         }
 
         [TestMethod]
@@ -291,7 +291,7 @@ namespace GenericsHomework.Tests
             int [] intArr4 = {13, 14, 15, 16};
             Node<int[]> list = CreateIntArray4NodeList(intArr1, intArr2, intArr3, intArr4);
             Assert.IsTrue(list.Remove(intArr3));
-            Assert.AreEqual($"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr4)}", $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}"); 
+            Assert.AreEqual<string>($"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr4)}", $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}"); 
         }
 
         [TestMethod]
@@ -299,7 +299,7 @@ namespace GenericsHomework.Tests
         {
             Node<int> node1 = new Node<int>(34);
 
-            Assert.AreEqual("34", node1.ToString());
+            Assert.AreEqual<string>("34", node1.ToString()!);
         }
 
         [TestMethod]
@@ -307,7 +307,7 @@ namespace GenericsHomework.Tests
         {
             Node<string> node1 = new Node<string>("Word");
 
-            Assert.AreEqual("Word", node1.ToString());
+            Assert.AreEqual<string>("Word", node1.ToString()!);
         }
 
         public Node<int> CreateInt4NodeList(int num1, int num2, int num3, int num4)

@@ -155,12 +155,12 @@ namespace GenericsHomework
             Node<T> prev = this;
             Node<T> cur = this.Next;
             bool first = true;
-
+            
             while (cur != this.Next || first)
             {
                 if ((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
                 {
-                    prev.SetNext(cur.Next);// Next set -> cur.next = prev.next
+                    prev.SetNext(cur.Next);
                     return true;
                 }
                 else
