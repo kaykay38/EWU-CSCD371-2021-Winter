@@ -90,7 +90,10 @@ namespace GenericsHomework
             return newNode;
         }
 
-        // Must dereference all removed nodes by setting them to null to allow for garbage collection
+
+        // setting this.Next to this is sufficent as long as there are not
+        // other refernces to the other nodes in the list in that case they 
+        // must all be set to themselves.
         public void Clear()
         {
             Node<T> cur;
