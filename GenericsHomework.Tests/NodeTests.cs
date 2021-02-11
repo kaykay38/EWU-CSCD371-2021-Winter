@@ -10,85 +10,105 @@ namespace GenericsHomework.Tests
     public class NodeTests
     {
 
-        [TestMethod]
-        public void NewInstance_GivenInt_NodeContainsInt()
-        {
-            Node<int> node1 = new Node<int>(789);
+        public string ToString(int[] array) => "{" + string.Join(", ", array) + "}";
+        public string ToString(ArrayList list) => "{" + string.Join(", ", list.ToArray()) + "}";
+        public string ToString<T>(List<T> list) => "{" + string.Join(", ", list.ToArray()) + "}";
 
-            Assert.AreEqual("789", node1.Data.ToString());
+
+        public Node<int> CreateInt4NodeList(int num1, int num2, int num3, int num4)
+        {
+            Node<int> node1 = new Node<int>(num1);
+            Node<int> node2 = node1.Insert(num2);
+            Node<int> node3 = node2.Insert(num3);
+            Node<int> node4 = node3.Insert(num4);
+            return node1;
+        }
+
+        public Node<string> CreateString4NodeList(string string1, string string2, string string3, string string4)
+        {
+            Node<string> node1 = new Node<string>(string1);
+            Node<string> node2 = node1.Insert(string2);
+            Node<string> node3 = node2.Insert(string3);
+            Node<string> node4 = node3.Insert(string4);
+            return node1;
+        }
+
+        public Node<int[]> CreateIntArray4NodeList(int[] intArr1, int[] intArr2, int[] intArr3, int[] intArr4)
+        {
+            Node<int[]> node1 = new Node<int[]>(intArr1);
+            Node<int[]> node2 = node1.Insert(intArr2);
+            Node<int[]> node3 = node2.Insert(intArr3);
+            Node<int[]> node4 = node3.Insert(intArr4);
+            return node1;
         }
 
         [TestMethod]
-        public void NewInstance_GivenString_NodeContainsString()
+        public void NewInstance_GivenInt_NodeContainsInt()
         {
-            Node<string> node1 = new Node<string>("Word");
+            Node<int> node1 = new(789);
 
-            Assert.AreEqual<string>("Word", node1.Data);
+            Assert.AreEqual("789", node1.Data.ToString());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void NewInstance_GivenNullValue_ThrowArgumentNullException()
         {
-
-            Node<string> node1 = new (null!);
-            //string? next = node1.ToString();
+            Node<string> node1 = new(null!);
         }
 
         [TestMethod]
-        public void Clear_Given4StringNodesClearFromNode3_DeferencedOtherNodes()
+        public void Add_Given4StringNodes_EqualToExpectedString()
+        {
+            Node<string> list = new("First");
+            list.Add("Second");
+            list.Add("Third");
+            list.Add("Fourth");
+            string actual = $"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}"; 
+            Assert.AreEqual<string>("First Second Third Fourth First", actual);
+        }
+        [TestMethod]
+        public void Clear_Given4StringNodesClearFromNode3_DeferencedNodes()
         {
             Node<string> node1 = new Node<string>("First");
             Node<string> node2 = node1.Insert("Second");
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual<string>("Third", node3.Next.Next.Next.Next.ToString()!);
-            //Assert.AreEqual("Third", node2.Next.Next.Next.Next.ToString());
+            Assert.AreEqual<string>("Third", node3.Next.Next.ToString()!);
         }
 
         [TestMethod]
-        public void Clear_Given4StringNodesClearFromNode3_DeferencedNodesNextReference1()
+        public void Clear_Given4StringNodesClearFromNode3_DeferencedNode1NextReference()
         {
             Node<string> node1 = new Node<string>("First");
             Node<string> node2 = node1.Insert("Second");
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual<string>("First", node1.Next.ToString()!);
+            Assert.AreEqual<string>("First", node1.Next.Next.ToString()!);
         }
 
         [TestMethod]
-        public void Clear_Given4StringNodesClearFromNode3_DeferencedNodesNextReference2()
+        public void Clear_Given4StringNodesClearFromNode3_DeferencedNode2NextReference()
         {
             Node<string> node1 = new Node<string>("First");
             Node<string> node2 = node1.Insert("Second");
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual<string>("Second", node2.Next.ToString()!);
+            Assert.AreEqual<string>("Second", node2.Next.Next.ToString()!);
         }
 
         [TestMethod]
-        public void Clear_Given4StringNodesClearFromNode3_DeferencedNodesNextReference3()
+        public void Clear_Given4StringNodesClearFromNode3_DeferencedNode4NextReference()
         {
             Node<string> node1 = new Node<string>("First");
             Node<string> node2 = node1.Insert("Second");
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
             node3.Clear();
-            Assert.AreEqual<string>("Third", node3.Next.ToString()!);
-        }
-
-        [TestMethod]
-        public void Clear_Given4StringNodesClearFromNode3_DeferencedNodesNextReference4()
-        {
-            Node<string> node1 = new Node<string>("First");
-            Node<string> node2 = node1.Insert("Second");
-            Node<string> node3 = node2.Insert("Third");
-            Node<string> node4 = node3.Insert("Fourth");
-            node3.Clear();
-            Assert.AreEqual<string>("Fourth", node4.Next.ToString()!);
+            Assert.AreEqual<string>("Fourth", node4.Next.Next.ToString()!);
         }
 
         [TestMethod]
@@ -105,6 +125,14 @@ namespace GenericsHomework.Tests
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
 
             Assert.IsTrue(list.Contains(1));
+        }
+
+        [TestMethod]
+        public void Contains_Given4IntValues_ContainsNonStoredValue_False()
+        {
+            Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
+
+            Assert.IsFalse(list.Contains(89));
         }
 
         [TestMethod]
@@ -217,8 +245,8 @@ namespace GenericsHomework.Tests
             Node<string> node2 = node1.Insert("Second");
             Node<string> node3 = node2.Insert("Third");
             Node<string> node4 = node3.Insert("Fourth");
-
-            Assert.AreEqual<string>("First Second Third Fourth First", $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()} {node1.Next.Next.Next.Next.ToString()}");
+            string actual = $"{node1.ToString()} {node1.Next.ToString()} {node1.Next.Next.ToString()} {node1.Next.Next.Next.ToString()} {node1.Next.Next.Next.Next.ToString()}"; 
+            Assert.AreEqual<string>("First Second Third Fourth First", actual);
         }
 
         [TestMethod]
@@ -258,9 +286,6 @@ namespace GenericsHomework.Tests
         {
             Node<int> list = CreateInt4NodeList(1, 2, 3, 4);
             Assert.IsTrue(list.Remove(1));
-            //Assert.AreEqual("86", list.ToString());
-            //Assert.AreEqual("9", list.ToString());
-            //Assert.AreEqual("33 42 33", $"{list.ToString()} {list.Next.ToString()} {list.Next.Next.ToString()} {list.Next.Next.Next.Next.ToString()}");
         }
 
         [TestMethod]
@@ -290,8 +315,13 @@ namespace GenericsHomework.Tests
             int [] intArr3 = {9, 10, 11, 12};
             int [] intArr4 = {13, 14, 15, 16};
             Node<int[]> list = CreateIntArray4NodeList(intArr1, intArr2, intArr3, intArr4);
+
             Assert.IsTrue(list.Remove(intArr3));
-            Assert.AreEqual<string>($"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr4)}", $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}"); 
+
+            string expected = $"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr4)}";
+            string actual = $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}";
+
+            Assert.AreEqual<string>(expected, actual); 
         }
 
         [TestMethod]
@@ -310,34 +340,19 @@ namespace GenericsHomework.Tests
             Assert.AreEqual<string>("Word", node1.ToString()!);
         }
 
-        public Node<int> CreateInt4NodeList(int num1, int num2, int num3, int num4)
+        [TestMethod]
+        public void ToString_Given4IntArrayyNodes_EqualToString()
         {
-            Node<int> node1 = new Node<int>(num1);
-            Node<int> node2 = node1.Insert(num2);
-            Node<int> node3 = node2.Insert(num3);
-            Node<int> node4 = node3.Insert(num4);
-            return node1;
-        }
+            int [] intArr1 = {1 ,2 ,3 ,4};
+            int [] intArr2 = {5, 6, 7, 8};
+            int [] intArr3 = {9, 10, 11, 12};
+            int [] intArr4 = {13, 14, 15, 16};
+            Node<int[]> list = CreateIntArray4NodeList(intArr1, intArr2, intArr3, intArr4);
 
-        public Node<string> CreateString4NodeList(string string1, string string2, string string3, string string4)
-        {
-            Node<string> node1 = new Node<string>(string1);
-            Node<string> node2 = node1.Insert(string2);
-            Node<string> node3 = node2.Insert(string3);
-            Node<string> node4 = node3.Insert(string4);
-            return node1;
-        }
+            string expected = $"{ToString(intArr1)}, {ToString(intArr2)}, {ToString(intArr3)}, {ToString(intArr4)}";
+            string actual = $"{ToString(list.Data)}, {ToString(list.Next.Data)}, {ToString(list.Next.Next.Data)}, {ToString(list.Next.Next.Next.Data)}";
 
-        public Node<int[]> CreateIntArray4NodeList(int[] intArr1, int[] intArr2, int[] intArr3, int[] intArr4)
-        {
-            Node<int[]> node1 = new Node<int[]>(intArr1);
-            Node<int[]> node2 = node1.Insert(intArr2);
-            Node<int[]> node3 = node2.Insert(intArr3);
-            Node<int[]> node4 = node3.Insert(intArr4);
-            return node1;
+            Assert.AreEqual<string>(expected, actual); 
         }
-        public string ToString(int[] array) => "{" + string.Join(", ", array) + "}";
-        public string ToString(ArrayList list) => "{" + string.Join(", ", list.ToArray()) + "}";
-        public string ToString<T>(List<T> list) => "{" + string.Join(", ", list.ToArray()) + "}";
     }
 }

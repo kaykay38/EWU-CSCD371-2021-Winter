@@ -6,8 +6,8 @@ namespace GenericsHomework
 {
     public class Node<T> : ICollection<T>
     {
-        private Node<T>? _next;
-        private T? _data;
+        private Node<T>? _Next;
+        private T? _Data;
         public bool IsReadOnly { get; }
 
         public int Count
@@ -23,13 +23,13 @@ namespace GenericsHomework
         {
             get
             {
-                return _next!;
+                return _Next!;
             }
 
             private set
             {
-                value._next = this._next;
-                _next = value ?? throw new ArgumentNullException();
+                value._Next = this._Next;
+                _Next = value ?? throw new ArgumentNullException();
             }
         }
 
@@ -42,31 +42,31 @@ namespace GenericsHomework
 
         private void SetNext(Node<T> value)
         {
-            _next = value ?? throw new ArgumentNullException();
+            _Next = value ?? throw new ArgumentNullException();
         }
 
         public T Data
         {
             get
             {
-                return _data!;
+                return _Data!;
             }
 
             private set
             {
-                _data = value ?? throw new ArgumentNullException(nameof(value)); ;
+                _Data = value ?? throw new ArgumentNullException(nameof(value)); ;
             }
         }
 
-        private int Size() 
+        private int Size()
         {
             Node<T> cur = this.Next;
             int count = 1;
-            while(cur != this)
-                {
-                    count++;
-                    cur = cur.Next;
-                }
+            while (cur != this)
+            {
+                count++;
+                cur = cur.Next;
+            }
             return count;
         }
 
@@ -74,12 +74,12 @@ namespace GenericsHomework
 
         public override string? ToString()
         {
-            if (_data is null)
+            if (Data is null)
             {
-                throw new ArgumentNullException(nameof(_data));
+                throw new ArgumentNullException(nameof(_Data));
             }
 
-            return _data.ToString();
+            return Data.ToString();
         }
 
         public Node<T> Insert(T t)
@@ -105,7 +105,15 @@ namespace GenericsHomework
 
         public void Add(T item)
         {
-            Insert(item);
+            Node<T> cur = this;
+            bool first = true;
+            while (cur.Next != this || first)
+            {
+                cur = cur.Next;
+                first = false;
+            }
+
+            cur.Insert(item);
         }
 
         public bool Contains(T item)
@@ -133,7 +141,7 @@ namespace GenericsHomework
 
             Node<T> cur = this;
             bool first = true;
-        
+
             while (cur != this || first)
             {
 
@@ -155,7 +163,7 @@ namespace GenericsHomework
             Node<T> prev = this;
             Node<T> cur = this.Next;
             bool first = true;
-            
+
             while (cur != this.Next || first)
             {
                 if ((cur.Data == null && item == null) || (cur.Data != null && cur.Data.Equals(item)))
@@ -170,7 +178,7 @@ namespace GenericsHomework
                 }
                 first = false;
             }
-            return false; 
+            return false;
         }
 
         public IEnumerator<T> GetEnumerator()
