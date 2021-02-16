@@ -1,12 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assignment
 {
     public class SampleData : ISampleData
     {
         // 1.
-        public IEnumerable<string> CsvRows => throw new NotImplementedException();
+        public IEnumerable<string> CsvRows{
+                get {        
+                    foreach (string row in File.ReadAllLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName, "Assignment" , "People.csv")).Skip(1)){
+                        yield return row;
+                    }
+                }
+        }
 
         // 2.
         public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() 
