@@ -17,7 +17,12 @@ namespace Assignment.Tests
                 result++;
             }
 
-            Assert.AreEqual<int>(50, result);
+            foreach(string item in sampleData.CsvRows)
+            {
+                result++;
+            }
+
+            Assert.AreEqual<int>(100, result);
             
         }
     }
