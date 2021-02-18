@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -58,7 +59,22 @@ namespace Assignment.Tests
                     result += PersonToString(item) + "\n";
             }
 
-            Assert.AreEqual<string>("", result);
+            Assert.AreEqual<string>("", result); // bad test - used this to see the output
+        }
+
+         [TestMethod]
+        public void FilterByEmailAddress_Test()
+        {
+            var sampleData = new SampleData();
+            string result = "";
+            Predicate<string> filter = (string str) => { return str == "atoall@fema.gov"; };
+
+            foreach((string FirstName, string LastName) item in sampleData.FilterByEmailAddress(filter))
+            {
+                   result += item.FirstName + " " + item.LastName;
+            }
+
+            Assert.AreEqual<string>("", result); // bad test - used this to see the output
         }
 
         private string PersonToString(Person person)
