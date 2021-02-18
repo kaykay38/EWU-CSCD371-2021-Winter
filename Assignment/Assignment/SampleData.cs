@@ -8,24 +8,21 @@ namespace Assignment
     public class SampleData : ISampleData
     {
         // 1.
-        public IEnumerable<string> CsvRows{
-                get {        
-                    foreach (string row in File.ReadAllLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName, "Assignment" , "People.csv")).Skip(1)){
-                        yield return row;
-                    }
-                }
-        }
+        public IEnumerable<string> CsvRows => File.ReadAllLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName, "Assignment" , "People.csv")).Skip(1);
+          
+        
 
         // 2.
-        public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() 
-            => throw new NotImplementedException();
+        public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() => CsvRows.Select(line=>line.Split(",")[6]).Distinct().OrderBy(state=>state);
+    
 
         // 3.
-        public string GetAggregateSortedListOfStatesUsingCsvRows()
-            => throw new NotImplementedException();
+        public string GetAggregateSortedListOfStatesUsingCsvRows() => string.Join(",", GetUniqueSortedListOfStatesGivenCsvRows().ToArray());
+
 
         // 4.
-        public IEnumerable<IPerson> People => throw new NotImplementedException();
+        public IEnumerable<IPerson> People => CsvRows.Select(line => line.Split(",")).OrderBy(line => line[6]).ThenBy(line => line[5]).ThenBy(line => line[7])
+                                                    .Select(person => new Person(person[1], person[2], new Address(person[4], person[5], person[6], person[7]), person[3]));
 
         // 5.
         public IEnumerable<(string FirstName, string LastName)> FilterByEmailAddress(
