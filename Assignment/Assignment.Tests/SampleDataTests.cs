@@ -9,7 +9,7 @@ namespace Assignment.Tests
     public class NodeTests
     {
         [TestMethod]
-        public void CsvRows_foreachWorks()
+        public void CsvRows_ForEachTwice_IteratesThroughDataTwice()
         {
             var sampleData = new SampleData();
             int result = 0;
@@ -18,17 +18,38 @@ namespace Assignment.Tests
                 result++;
             }
 
-            foreach(string item in sampleData.CsvRows)
-            {
-                result++;
-            }
-
-            Assert.AreEqual<int>(100, result);
+            Assert.AreEqual<int>(50, result);
             
         }
 
         [TestMethod]
-        public void GetAggregateSortedListOfStatesUsingCsvRows_Match()
+        public void GetUniqueSortedListOfStatesGivenCsvRows_ReturnsUnique()
+        {
+            var sampleData = new SampleData();
+            bool result = true;
+
+            int count = 0;       
+            int otherItemIndex = 0;            
+            foreach(string item in sampleData.GetUniqueSortedListOfStatesGivenCsvRows()) 
+            {
+                count = 0;
+                foreach(string otherItem in sampleData.GetUniqueSortedListOfStatesGivenCsvRows())
+                {
+                    otherItemIndex = 0;
+                    if(item.Equals(otherItem) && otherItemIndex > count){ // use count and otherItemIndex to compare each element with all other elements
+                        result = false;                                     // without these the elements get compared to each other and that results in false positives
+                    }
+                    otherItemIndex++;
+                }
+                otherItemIndex = 0;
+                count ++;
+            }
+
+            Assert.IsTrue(result); 
+        }
+
+        [TestMethod]
+        public void GetAggregateSortedListOfStatesUsingCsvRows_MatchsJoinGetUniqueSortedListOfStatesGivenCsvRows()
         {
             var sampleData = new SampleData();
             string? result = null;
@@ -42,11 +63,33 @@ namespace Assignment.Tests
                 {
                     result = string.Join(",", result, item);
                 }
-                
             }
-
             Assert.AreEqual<string>(result!, sampleData.GetAggregateSortedListOfStatesUsingCsvRows());
-            
+        }
+
+         [TestMethod]
+        public void GetAggregateSortedListOfStatesUsingCsvRows_AreAlphabetical()
+        {
+            var sampleData = new SampleData();
+            bool result = true;
+
+            int count = 0;
+            int otherItemIndex = 0;            
+            foreach(string item in sampleData.GetAggregateSortedListOfStatesUsingCsvRows().Split(","))
+            {
+                count = 0;
+                foreach(string otherItem in sampleData.GetAggregateSortedListOfStatesUsingCsvRows().Split(","))
+                {
+                    otherItemIndex = 0;
+                    if(string.Compare(item, otherItem) > 0 && otherItemIndex > count){
+                        result = false;
+                    }
+                    otherItemIndex++;
+                }
+                otherItemIndex = 0;
+                count ++;
+            }
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
