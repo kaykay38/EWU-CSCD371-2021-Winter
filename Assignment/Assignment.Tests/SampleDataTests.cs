@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -9,7 +11,7 @@ namespace Assignment.Tests
     public class NodeTests
     {
         [TestMethod]
-        public void CsvRows_ForEachTwice_IteratesThroughDataTwice()
+        public void CsvRows_ForEach_IteratesThroughData()
         {
             var sampleData = new SampleData();
             int result = 0;
@@ -19,37 +21,48 @@ namespace Assignment.Tests
             }
 
             Assert.AreEqual<int>(50, result);
-            
+
         }
 
         [TestMethod]
-        public void GetUniqueSortedListOfStatesGivenCsvRows_ReturnsUnique()
+        public void GetUniqueSortedListOfStatesGivenCsvRows_IsUnique()
         {
+            // Using a hashset so as only to iterate once through CsvRows
+            // by adding each item from CsvRows to a hashset.
+            var statesSet = new HashSet<string>();
             var sampleData = new SampleData();
-            bool result = true;
 
-            int count = 0;       
-            int otherItemIndex = 0;            
-            foreach(string item in sampleData.GetUniqueSortedListOfStatesGivenCsvRows()) 
+            IEnumerable<string> states = sampleData.GetUniqueSortedListOfStatesGivenCsvRows();
+
+            foreach (string item in states)
             {
-                count = 0;
-                foreach(string otherItem in sampleData.GetUniqueSortedListOfStatesGivenCsvRows())
-                {
-                    otherItemIndex = 0;
-                    if(item.Equals(otherItem) && otherItemIndex > count){ // use count and otherItemIndex to compare each element with all other elements
-                        result = false;                                     // without these the elements get compared to each other and that results in false positives
-                    }
-                    otherItemIndex++;
-                }
-                otherItemIndex = 0;
-                count ++;
+                if (!statesSet.Add(item))
+                    Assert.Fail();
             }
-
-            Assert.IsTrue(result); 
         }
 
         [TestMethod]
-        public void GetAggregateSortedListOfStatesUsingCsvRows_MatchsJoinGetUniqueSortedListOfStatesGivenCsvRows()
+        public void GetUniqueSortedListOfStatesGivenCsvRows_IsSorted()
+        {
+            // Using a hashset so as only to iterate once through CsvRows
+            // by adding each item from CsvRows to a hashset.
+            var statesSet = new HashSet<string>();
+            var sampleData = new SampleData();
+
+            IEnumerable<string> states = sampleData.GetUniqueSortedListOfStatesGivenCsvRows();
+
+            foreach (string item in states)
+            {
+                // Compares the previous item, which is the last item in the hashset,
+                // to the current item
+                if(statesSet.Count!=0 && item.CompareTo(statesSet.Last()) < 0)
+                    Assert.Fail();
+                statesSet.Add(item);
+            }
+        }
+
+        [TestMethod]
+        public void GetAggregateSortedListOfStatesUsingCsvRows_EqualsJoinGetUniqueSortedListOfStatesGivenCsvRows()
         {
             var sampleData = new SampleData();
             string? result = null;
@@ -61,63 +74,70 @@ namespace Assignment.Tests
                 }
                 else
                 {
-                    result = string.Join(",", result, item);
+                    result = string.Join(", ", result, item);
                 }
             }
             Assert.AreEqual<string>(result!, sampleData.GetAggregateSortedListOfStatesUsingCsvRows());
         }
 
-         [TestMethod]
-        public void GetAggregateSortedListOfStatesUsingCsvRows_AreAlphabetical()
+        [TestMethod]
+        public void People_EqualToExpectedPersonString()
         {
             var sampleData = new SampleData();
-            bool result = true;
+            string result = "\n", expected = "\n";
 
-            int count = 0;
-            int otherItemIndex = 0;            
-            foreach(string item in sampleData.GetAggregateSortedListOfStatesUsingCsvRows().Split(","))
+            var people = sampleData.CsvRows.Select(line => line.Split(",")).OrderBy(line => line[6]).
+                ThenBy(line => line[5]).ThenBy(line => line[7]).
+                Select( line => new string[] { line[6], line[5], line[7], line[1]+" "+line[2], line[3]}).Select(line => string.Join(", ", line));
+
+            foreach (string line in people)
             {
-                count = 0;
-                foreach(string otherItem in sampleData.GetAggregateSortedListOfStatesUsingCsvRows().Split(","))
-                {
-                    otherItemIndex = 0;
-                    if(string.Compare(item, otherItem) > 0 && otherItemIndex > count){
-                        result = false;
-                    }
-                    otherItemIndex++;
-                }
-                otherItemIndex = 0;
-                count ++;
+                expected += line + "\n";
             }
-            Assert.IsTrue(result);
+
+            foreach (Person item in sampleData.People)
+            {
+                result += PersonToString(item) + "\n";
+            }
+
+            Assert.AreEqual<string>(expected, result);
         }
 
         [TestMethod]
-        public void People_Test()
-        {
-            var sampleData = new SampleData();
-            string result = "\n";
-            foreach(Person item in sampleData.People)
-            {
-                    result += PersonToString(item) + "\n";
-            }
-
-            Assert.AreEqual<string>("", result); // bad test - used this to see the output
-        }
-
-         [TestMethod]
-        public void FilterByEmailAddress_Test()
+        public void FilterByEmailAddress_GivenExistentEmail_ReturnsFirstLastName()
         {
             var sampleData = new SampleData();
             string result = "";
+
             Predicate<string> filter = (string str) => { return str == "atoall@fema.gov"; };
 
-            foreach((string FirstName, string LastName) item in sampleData.FilterByEmailAddress(filter))
+            foreach ((string FirstName, string LastName) item in sampleData.FilterByEmailAddress(filter))
             {
-                   result += item.FirstName + " " + item.LastName;
+                result += item.FirstName + " " + item.LastName;
             }
 
-            Assert.AreEqual<string>("", result); // bad test - used this to see the output
+            Assert.AreEqual<string>("Amelia Toal", result);
+        }
+
+        [TestMethod]
+        public void FilterByEmailAddress_GivenNonExistentEmail_ReturnsEmptyIEnumerable()
+        {
+            var sampleData = new SampleData();
+
+            Predicate<string> filter = (string str) => { return str == "test@test.gov"; };
+
+            Assert.IsTrue(!sampleData.FilterByEmailAddress(filter).Any());
+        }
+
+        [TestMethod]
+        public void GetAggregateListOfStatesGivenPeopleCollection_EqualsExpectedString()
+        {
+            var sampleData = new SampleData();
+
+            string expected = sampleData.GetAggregateSortedListOfStatesUsingCsvRows();
+            string result = sampleData.GetAggregateListOfStatesGivenPeopleCollection(sampleData.People);
+
+            Assert.AreEqual<string>(expected, result);
         }
 
         private string PersonToString(Person person)
