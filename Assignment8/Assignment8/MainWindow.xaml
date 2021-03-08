@@ -11,6 +11,45 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
+        <Button Content="Start" 
+                HorizontalAlignment="Left" 
+                Margin="166,78,0,0" 
+                VerticalAlignment="Top" 
+                x:Name="Start"
+                Click="Button_Click"/>
+        <Button Content="Stop" 
+                HorizontalAlignment="Left" 
+                Margin="166,118,0,0" 
+                VerticalAlignment="Top"
+                x:Name="Stop" Click="Stop_Click" 
+                RenderTransformOrigin="1.644,0.641"/>
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Margin="269,98,0,0" 
+            Text="00:00:00" 
+            TextWrapping="Wrap" 
+            VerticalAlignment="Top"
+            x:Name="Timer"/>
+        <TextBox 
+            x:Name="Description"
+            HorizontalAlignment="Left" 
+            Margin="231,128,0,0" 
+            TextWrapping="Wrap"
+            VerticalAlignment="Top" 
+            Width="120"/>
+        <Button 
+            Content="Save" 
+            HorizontalAlignment="Left" 
+            Margin="271,171,0,0" 
+            VerticalAlignment="Top"
+            x:Name="Save" Click="Save_Click"/>
 
+        <ListBox 
+            x:Name="SavedBox" 
+            Margin="0,217,0,0" 
+            Grid.RowSpan="2"
+            KeyDown="SavedBox_KeyDown">
+            
+        </ListBox>
     </Grid>
 </Window>
