@@ -89,9 +89,7 @@ namespace Assignment8
             {
                 SavedBox.Items.Remove(SavedBox.SelectedItem);
             }
-
         }
         private void Description_TextChanged(object sender, TextChangedEventArgs e) => _Description = Description.Text;
-
     }
 }

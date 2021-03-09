@@ -81,6 +81,7 @@
             Grid.Row="7"
             Grid.ColumnSpan="3"
             Grid.RowSpan="1"
-           />
+           >
+        </ListBox>
     </Grid>
 </Window>
