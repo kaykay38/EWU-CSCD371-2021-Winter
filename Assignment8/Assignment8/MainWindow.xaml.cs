@@ -44,7 +44,7 @@ namespace Assignment8
 
         private void StartStop_Click(object sender, RoutedEventArgs e)
         {
-            if (StartStop.Content.ToString() == "Start")
+            if (StartStop.Content.ToString() == "Start" || StartStop.Content.ToString() == "Restart")
             {
                 _StartTime = DateTime.Now;
                 dispatcherTimer.Start();
@@ -61,14 +61,18 @@ namespace Assignment8
                 dispatcherTimer.Stop();
                 _IsStopped = true;
                 // Changes button to show start
-                StartStop.Content = "Start";
+                StartStop.Content = "Restart";
                 // Changes background color back to green
                 StartStop.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#6FA147"));
-                Record.Visibility = Visibility.Visible;
-                Description.Visibility = Visibility.Visible;
-                Description.Text = "Lap " + lap + "  " + _StartTime.ToString("h:mm:ss tt");
+                if (Timer.Text != "00:00:00")
+                {
+                    Record.Visibility = Visibility.Visible;
+                    Description.Visibility = Visibility.Visible;
+                    Description.Text = "Lap " + lap + "  " + _StartTime.ToString("h:mm:ss tt");
+                }
             }
         }
+
 
         private void Record_Click(object sender, RoutedEventArgs e)
         {
@@ -80,6 +84,7 @@ namespace Assignment8
                 Timer.Text = "00:00:00";
                 Record.Visibility = Visibility.Hidden;
                 Description.Visibility = Visibility.Hidden;
+                StartStop.Content = "Start";
             }
         }
 
