@@ -6,6 +6,59 @@
         xmlns:local="clr-namespace:Assignment8"
         mc:Ignorable="d"
         Title="Timer" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#313131" />
+            <Setter Property="Foreground" Value="#dddddd" />
+        </Style>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="#313131" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Foreground" Value="#dddddd"/>
+            <Setter Property="CaretBrush" Value="#dddddd"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="bg" BorderBrush="#404040" BorderThickness=".5">
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="bg" Value="#999999"/>
+                                <Setter Property="BorderThickness" TargetName="bg" Value=".5"/>
+                            </Trigger>
+
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" TargetName="bg" Value="#999999"/>
+                                <Setter Property="BorderThickness" TargetName="bg" Value=".5"/>
+                            </Trigger>
+
+
+                            <Trigger Property="IsFocused" Value="False">
+                                <Setter Property="BorderBrush" TargetName="bg" Value="#404040"/>
+                                <Setter Property="BorderThickness" TargetName="bg" Value=".5"/>
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="BorderBrush" TargetName="bg" Value="#404040"/>
+                                <Setter Property="BorderThickness" TargetName="bg" Value=".5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="BorderBrush" Value="#404040" />
+            <Setter Property="Background" Value="#313131" />
+            <Setter Property="Foreground" Value="#dddddd" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30*"/>

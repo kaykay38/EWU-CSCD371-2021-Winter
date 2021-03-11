@@ -69,6 +69,8 @@ namespace Assignment8
                     Record.Visibility = Visibility.Visible;
                     Description.Visibility = Visibility.Visible;
                     Description.Text = "Lap " + lap + "  " + _StartTime.ToString("h:mm:ss tt");
+                    Description.CaretIndex = Description.Text.Length;
+                    Description.Focus();
                 }
             }
         }
